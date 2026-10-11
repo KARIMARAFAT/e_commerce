@@ -1,3 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:ecommerce_app_huma_volve/core/helper/snack.dart';
+import 'package:ecommerce_app_huma_volve/core/network/api_client.dart';
+import 'package:ecommerce_app_huma_volve/features/auth/sign_up/models/sign_up_model.dart';
+import 'package:ecommerce_app_huma_volve/features/auth/sign_up/services/sign_up_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/widgets/custom_text_field.dart';
@@ -17,12 +22,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late final TextEditingController nameController;
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
+  bool isloading = false;
+  late final ApiClient apiClient;
+  late final SignUpService signUpService;
+  Future<void> signUp() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        isloading = true;
+      });
+      try {
+        final response = await signUpService.signup(
+          SignUpReModel(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+            fullName: nameController.text.trim(),
+          ),
+        );
+        setState(() {
+          isloading = false;
+        });
+        showsnackbar(context, Colors.green, 'email created succesfully');
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } on DioException catch (e) {
+        setState(() {
+          isloading = false;
+        });
+        showsnackbar(context, Colors.red, e.message.toString());
+      }
+    }
+  }
 
   @override
   void initState() {
     nameController = TextEditingController();
     emailController = TextEditingController();
     passwordController = TextEditingController();
+    apiClient = ApiClient();
+    signUpService = SignUpService(apiClient);
 
     super.initState();
   }
@@ -110,16 +150,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 40),
                 PrimaryButton(
                   text: 'Sign Up',
-                  onPressed: () async {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    }
-                  },
+                  isLoading: isloading,
+                  onPressed: signUp,
                 ),
                 const SizedBox(height: 24),
                 Row(
