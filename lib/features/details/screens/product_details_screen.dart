@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_huma_volve/features/home/service/models/product_model.dart';
+import 'package:ecommerce_app_huma_volve/features/home/domain/entities/home_product_entity.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme.dart';
@@ -7,7 +7,7 @@ import '../widgets/size_selector.dart';
 import '../../../core/widgets/primary_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final ProductModel product;
+  final HomeProductEntity product;
 
   const ProductDetailsScreen({super.key, required this.product});
 
@@ -70,9 +70,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: 'product-${widget.product.id}',
-                child: widget.product.images!.isNotEmpty
+                child: widget.product.images.isNotEmpty
                     ? Image.network(
-                        widget.product.images!.first,
+                        widget.product.images.first,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return const Center(
@@ -108,14 +108,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.product.title ?? '',
+                            widget.product.title,
                             style: Theme.of(context).textTheme.headlineLarge
                                 ?.copyWith(fontSize: 28, height: 1.2),
                           ),
                         ),
                         const SizedBox(width: 16),
                         Text(
-                          '\$${widget.product.price ?? 0}',
+                          '\$${widget.product.price}',
                           style: Theme.of(context).textTheme.headlineLarge
                               ?.copyWith(color: AppTheme.primary, fontSize: 24),
                         ),
@@ -133,7 +133,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     const SizedBox(height: 8),
 
                     Text(
-                      widget.product.description ?? '',
+                      widget.product.description,
                       style: Theme.of(context).textTheme.bodyMedium
                           ?.copyWith(height: 1.6, fontSize: 16),
                     ),
@@ -192,7 +192,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              '${widget.product.title ?? 'Product'} '
+                              '${widget.product.title} '
                               'added to cart',
                             ),
                             behavior: SnackBarBehavior.floating,
