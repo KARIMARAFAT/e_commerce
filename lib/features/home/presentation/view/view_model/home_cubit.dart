@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
   final GetCategoriesUsecase getCategoriesUsecase;
-  final GetProductsUsecase getProductsUsecase;
+  final GetProductsUseCase getProductsUsecase;
 
   final List<HomeProductEntity> products = [];
   int limit = 10;
