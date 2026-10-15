@@ -27,7 +27,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
   late final HomeRemoteDataSource homeRemoteDataSource;
   late final GetCategoriesUsecase getCategoriesUsecase;
-  late final GetProductsUsecase getProductsUsecase;
+  late final GetProductsUseCase getProductsUsecase;
   late final HomeRepository homeRepository;
   late final ApiClient apiClient;
   late final HomeCubit homeCubit;
@@ -38,7 +38,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     homeRemoteDataSource = HomeRemoteDataSourceImp(apiClient);
     homeRepository = HomeRepositoryImp(homeRemoteDataSource);
     getCategoriesUsecase = GetCategoriesUsecase(homeRepository);
-    getProductsUsecase = GetProductsUsecase(homeRepository);
+    getProductsUsecase = GetProductsUseCase(homeRepository);
     homeCubit = HomeCubit(
       getCategoriesUsecase: getCategoriesUsecase,
       getProductsUsecase: getProductsUsecase,
