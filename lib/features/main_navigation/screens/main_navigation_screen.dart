@@ -25,43 +25,55 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+
+  late final ApiClient apiClient;
   late final HomeRemoteDataSource homeRemoteDataSource;
+  late final HomeRepository homeRepository;
   late final GetCategoriesUsecase getCategoriesUsecase;
   late final GetProductsUseCase getProductsUsecase;
-  late final HomeRepository homeRepository;
-  late final ApiClient apiClient;
   late final HomeCubit homeCubit;
 
+  final Future<Map<String, dynamic>?> _userDataFuture =
+      SecureStorage.getUserData();
   @override
   void initState() {
+    super.initState();
     apiClient = ApiClient();
     homeRemoteDataSource = HomeRemoteDataSourceImp(apiClient);
     homeRepository = HomeRepositoryImp(homeRemoteDataSource);
     getCategoriesUsecase = GetCategoriesUsecase(homeRepository);
     getProductsUsecase = GetProductsUseCase(homeRepository);
+
     homeCubit = HomeCubit(
       getCategoriesUsecase: getCategoriesUsecase,
       getProductsUsecase: getProductsUsecase,
     );
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    homeCubit.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>?>(
-      future: SecureStorage.getUserData(),
+      future: _userDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         final userData = snapshot.data;
         final parsedId = userData != null && userData['id'] != null
             ? (userData['id'] is int
                   ? userData['id']
                   : int.tryParse(userData['id'].toString()) ?? 0)
             : 0;
+
         final signUpEntity = SignUpEntity(
           id: parsedId,
           name: userData?['name'] ?? 'Guest User',
@@ -71,16 +83,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         );
 
         final List<Widget> screens = [
-          BlocProvider(
-            create: (context) => homeCubit,
-            child: const HomeScreen(),
-          ),
+          BlocProvider.value(value: homeCubit, child: const HomeScreen()),
           const CartScreen(),
           ProfileScreen(signUpEntity: signUpEntity),
         ];
 
         return Scaffold(
-          body: screens[_currentIndex],
+          body: IndexedStack(index: _currentIndex, children: screens),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
               boxShadow: [
