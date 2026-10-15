@@ -5,7 +5,6 @@ import 'package:ecommerce_app_huma_volve/core/widgets/custom_text_field.dart';
 import 'package:ecommerce_app_huma_volve/core/widgets/primary_button.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/data/data_source/auth_remote_data_source.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/data/data_source/auth_remote_data_source_imp.dart';
-import 'package:ecommerce_app_huma_volve/features/auth/data/models/sign_up_model.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/data/repository/auth_repository_imp.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/domain/entities/sign_up_response_entity.dart';
 import 'package:ecommerce_app_huma_volve/features/auth/domain/repository/auth_repository.dart';
