@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_huma_volve/features/details/screens/product_details_screen.dart';
+import 'package:ecommerce_app_huma_volve/features/details/presentation/view/product_details_screen.dart';
 import 'package:ecommerce_app_huma_volve/features/home/domain/entities/home_product_entity.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class ProductCard extends StatelessWidget {
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 500),
             pageBuilder: (context, animation, secondaryAnimation) =>
-                ProductDetailsScreen(product: productModel),
+                ProductDetailsScreen(productId: productModel.id),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
                   return FadeTransition(opacity: animation, child: child);
