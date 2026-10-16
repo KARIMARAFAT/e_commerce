@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_huma_volve/features/details/presentation/view/widgets/share_product_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,6 +49,9 @@ class _ProductDetailsViewState extends State<_ProductDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [ShareProductButton(productId: widget.productId.toString())],
+      ),
       backgroundColor: AppTheme.background,
       body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
         builder: (context, state) {
@@ -66,15 +70,12 @@ class _ProductDetailsViewState extends State<_ProductDetailsView> {
             );
           } else if (state is ProductDetailsLoaded) {
             final product = state.product;
-
-            // تحديد اللون والمقاس الافتراضيين بمجرد وصول البيانات
             _selectedColor ??= product.colors.isNotEmpty
                 ? product.colors.first
                 : Colors.grey;
             _selectedSize ??= product.sizes.isNotEmpty
                 ? product.sizes.first
                 : '';
-
             return CustomScrollView(
               slivers: [
                 SliverAppBar(
