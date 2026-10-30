@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 final appRouting = GoRouter(
   initialLocation: '/',
-
   routes: [
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
     GoRoute(

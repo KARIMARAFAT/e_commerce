@@ -1,3 +1,5 @@
+import 'package:ecommerce_app_huma_volve/features/cart/domain/entities/cart_item_entity.dart';
+import 'package:ecommerce_app_huma_volve/features/cart/presentation/view_model/cart_cubit.dart';
 import 'package:ecommerce_app_huma_volve/features/details/presentation/view/widgets/share_product_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,9 +51,6 @@ class _ProductDetailsViewState extends State<_ProductDetailsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [ShareProductButton(productId: widget.productId.toString())],
-      ),
       backgroundColor: AppTheme.background,
       body: BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
         builder: (context, state) {
@@ -94,6 +93,7 @@ class _ProductDetailsViewState extends State<_ProductDetailsView> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   actions: [
+                    ShareProductButton(productId: widget.productId.toString()),
                     IconButton(
                       icon: Container(
                         padding: const EdgeInsets.all(8),
@@ -228,6 +228,15 @@ class _ProductDetailsViewState extends State<_ProductDetailsView> {
                           PrimaryButton(
                             text: 'Add to Cart',
                             onPressed: () {
+                              final cartItem = CartItemEntity(
+                                product: product,
+                                selectedSize: _selectedSize ?? '',
+                                selectedColor: _selectedColor ?? Colors.grey,
+                                quantity: 1,
+                              );
+
+                              // 2. إرسال الكائن للـ Cubit
+                              context.read<CartCubit>().addToCart(cartItem);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(

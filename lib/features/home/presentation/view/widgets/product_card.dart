@@ -1,6 +1,9 @@
+import 'package:ecommerce_app_huma_volve/features/cart/domain/entities/cart_item_entity.dart';
+import 'package:ecommerce_app_huma_volve/features/cart/presentation/view_model/cart_cubit.dart';
 import 'package:ecommerce_app_huma_volve/features/details/presentation/view/product_details_screen.dart';
 import 'package:ecommerce_app_huma_volve/features/home/domain/entities/home_product_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/theme.dart';
 
@@ -111,16 +114,44 @@ class ProductCard extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            color: AppTheme.primary,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 16,
+                        GestureDetector(
+                          onTap: () {
+                            final cartItem = CartItemEntity(
+                              product: productModel,
+                              selectedSize: productModel.sizes.isNotEmpty
+                                  ? productModel.sizes.first
+                                  : '',
+                              selectedColor: productModel.colors.isNotEmpty
+                                  ? productModel.colors.first
+                                  : Colors.grey,
+                              quantity: 1,
+                            );
+                            context.read<CartCubit>().addToCart(cartItem);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${productModel.title} added to cart',
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: AppTheme.primary,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: AppTheme.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                           ),
                         ),
                       ],

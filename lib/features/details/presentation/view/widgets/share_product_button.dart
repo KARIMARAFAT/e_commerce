@@ -14,10 +14,11 @@ class ShareProductButton extends StatelessWidget {
             'https://autoswift-c3d18.web.app/products/$productId';
         final String shareMessage =
             'Look at this product on Huma Volve: $shareLink';
-
-        await Share.share(
-          shareMessage,
-          subject: 'Check out this product on Huma Volve',
+        await SharePlus.instance.share(
+          ShareParams(
+            text: shareMessage,
+            subject: 'check out the product on humavolve',
+          ),
         );
       },
       icon: const Icon(Icons.share),
